@@ -1,26 +1,32 @@
 from flask import Flask, request, jsonify
-import telebot
+from flask_cors import CORS
+import requests
 
 app = Flask(__name__)
+CORS(app)
 
-# Replace 'YOUR_BOT_TOKEN' with your actual Telegram bot token
-bot = telebot.TeleBot('YOUR_BOT_TOKEN')
+BOT_TOKEN = 'YOUR_BOT_TOKEN'  
 
-@app.route('/start', methods=['GET'])
+@app.route('/set_webhook', methods=['POST'])
+def set_webhook():
+    webhook_url = request.json.get('webhook_url')
+    url = f"https://api.telegram.org/bot{BOT_TOKEN}/setWebhook?url={webhook_url}"
+    response = requests.get(url)
+    return jsonify(response.json())
+
+@app.route('/start', methods=['POST'])
 def start():
-    user_id = request.args.get('user_id')
-    if user_id:
-        bot.send_message(user_id, "Welcome to the bot! Please watch this ad.")
-        # Send a message with the ad content (you can customize this)
-        bot.send_message(user_id, "Ad Content: [Skip Ad](http://your-angular-app-url/ad)", parse_mode="Markdown")
+    data = request.json
+    chat_id = data['message']['chat']['id']
+
+    send_message(chat_id, "Click this link to view the ad: https://your-angular-app.com/ad")
+
     return jsonify({"status": "success"})
 
-@app.route('/skip_ad', methods=['GET'])
-def skip_ad():
-    user_id = request.args.get('user_id')
-    if user_id:
-        bot.send_message(user_id, "Here is your video: [Watch Video](http://your-angular-app-url/bot)", parse_mode="Markdown")
-    return jsonify({"status": "success"})
+def send_message(chat_id, text):
+    url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
+    payload = {"chat_id": chat_id, "text": text}
+    requests.post(url, json=payload)
 
 if __name__ == '__main__':
     app.run(debug=True)
