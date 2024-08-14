@@ -77,6 +77,10 @@ def webhook():
     bot.process_new_updates([update])
     return 'OK', 200
 
+@app.route('/video', methods=['GET'])
+def video():
+    return jsonify(video_data)
+
 if __name__ == '__main__':
     bot.remove_webhook()
     # frontend url deployed on netlify
