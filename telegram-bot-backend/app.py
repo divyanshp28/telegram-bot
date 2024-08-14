@@ -37,9 +37,10 @@ video_data = {
 def send_welcome(message):
     bot.send_message(
         message.chat.id,
-        "Welcome! Click the link to watch an ad. After skipping, the main video will start."
+        "Welcome! Click the link to watch an ad. After skipping, the main video will start. Visit our site: https://telegram-bot-video.onrender.com"
     )
     send_ad(message)
+
 
 def send_ad(message):
     markup = telebot.types.InlineKeyboardMarkup()
