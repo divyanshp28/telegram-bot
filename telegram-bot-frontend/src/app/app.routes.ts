@@ -1,14 +1,15 @@
 import { Routes } from '@angular/router';
 import { RouterModule } from '@angular/router';
-import { BotComponent } from './bot/bot.component';
-import { AdComponent } from './ad/ad.component';
 import { NgModule } from '@angular/core';
+import { HomeComponent } from './home/home.component';
+import { AdComponent } from './ad/ad.component';
+import { VideoComponent } from './video/video.component';
 
 export const routes: Routes = [
-    { path: '', redirectTo: '/bot', pathMatch: 'full' },
-    { path: 'bot', component: BotComponent },
-    { path: 'ad', component: AdComponent }
-];
+    { path: '', component: HomeComponent },
+    { path: 'ad', component: AdComponent },
+    { path: 'video', component: VideoComponent }
+  ];
 
 @NgModule({
     imports: [RouterModule.forRoot(routes)],

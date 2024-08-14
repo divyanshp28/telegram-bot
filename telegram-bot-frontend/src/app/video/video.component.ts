@@ -5,14 +5,14 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-ad',
+  selector: 'app-video',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './ad.component.html',
-  styleUrl: './ad.component.css'
+  templateUrl: './video.component.html',
+  styleUrl: './video.component.css'
 })
-export class AdComponent implements OnInit {
-  adVideoUrl: SafeResourceUrl | null = null;
+export class VideoComponent implements OnInit {
+  mainVideoUrl: SafeResourceUrl | null = null;
 
   constructor(private router: Router, private api: ApiService, private sanitizer: DomSanitizer) { }
 
@@ -20,18 +20,11 @@ export class AdComponent implements OnInit {
     this.get_video();
   }
 
-  skipAd() {
-    this.router.navigate(['/video']);
-  }
-
-  closeAd() {
-    this.router.navigate(['/video']);
-  }
-
   get_video() {
     this.api.get_video_url().subscribe({
       next: (data: any) => {
-        this.adVideoUrl = this.sanitizer.bypassSecurityTrustResourceUrl(data.ad_video_url);
+        this.mainVideoUrl = this.sanitizer.bypassSecurityTrustResourceUrl(data.main_video_url);
+
       },
       error: (error) => {
         console.log(error)
@@ -39,8 +32,13 @@ export class AdComponent implements OnInit {
     })
   }
 
-  // closeAd() {
+  closeVideo() {
+    this.router.navigate(['/ad']);
+  }
+
+  // closeVideo() {
   //   window.location.href = 'tg://resolve?domain=your_bot_username';
   // }
 
+  playVideo() { }
 }

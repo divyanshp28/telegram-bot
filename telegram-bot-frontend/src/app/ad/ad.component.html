@@ -1,3 +1,46 @@
-<h2>Advertisement</h2>
-<p>Your ad content here...</p>
-<button (click)="onSkip()">Skip Ad</button>
+<!-- <div class="flex flex-col items-center justify-center h-screen p-4 bg-gray-100">
+  <div class="w-full max-w-md bg-white rounded-lg shadow">
+    <h3 class="text-lg font-bold mb-4 text-center">Advertisement</h3>
+    <div class="aspect-w-16 aspect-h-9 mb-4">
+      <iframe *ngIf="adVideoUrl" [src]="adVideoUrl" frameborder="0" allowfullscreen></iframe>
+    </div>
+    <div class="flex justify-center mb-4">
+      <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" (click)="skipAd()">
+        Skip Ad
+      </button>
+    </div>
+  </div>
+</div> -->
+
+<!-- <div class="flex flex-col items-center justify-center h-screen p-4 bg-gray-100">
+  <div class="w-full max-w-md bg-white rounded-lg shadow">
+    <h3 class="text-lg font-bold mb-4 text-center">Advertisement</h3>
+    <div class="aspect-w-16 aspect-h-9 mb-4">
+      <iframe *ngIf="adVideoUrl" [src]="adVideoUrl" frameborder="0" allowfullscreen></iframe>
+    </div>
+    <div class="flex mb-4 px-4">
+      <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" (click)="skipAd()">
+        Skip Ad
+      </button>
+    </div>
+  </div>
+</div> -->
+
+<div class="flex flex-col items-center justify-center h-screen p-4 bg-gray-100 relative">
+  <div class="w-full max-w-md bg-white rounded-lg shadow relative">
+    <button class="absolute top-2 right-0 text-gray-500 hover:text-gray-700" (click)="closeAd()">
+      ×
+    </button>
+    <h3 class="text-lg font-bold mb-4 text-center">Advertisement</h3>
+    <div class="aspect-w-16 aspect-h-9 mb-4">
+      <iframe *ngIf="adVideoUrl" [src]="adVideoUrl" frameborder="0" allowfullscreen></iframe>
+    </div>
+    <div class="flex justify-between mb-4 px-4">
+      <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" (click)="skipAd()">
+        Skip Ad
+      </button>
+    </div>
+  </div>
+</div>
+
+
