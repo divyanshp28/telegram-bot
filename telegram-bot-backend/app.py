@@ -79,6 +79,6 @@ def webhook():
 if __name__ == '__main__':
     bot.remove_webhook()
     # frontend url deployed on netlify
-    bot.set_webhook(url="https://test-ad-telegram-bot.netlify.app/webhook")
+    bot.set_webhook(url="https://telegram-bot-r3bg.onrender.com/webhook")
     app.run(debug=True)
 
