@@ -32,7 +32,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     )
 
 async def send_video(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    video_url = "https://your-video-link.com"  # Replace with your video URL
+    video_url = "https://www.youtube.com/embed/vZtm1wuA2yc"  # Replace with your video URL
     await update.message.reply_text(f"Here is your video: {video_url}")
 
 def run_bot():
