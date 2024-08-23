@@ -1,5 +1,23 @@
+# from flask import Flask, render_template, request, redirect
+
+# app = Flask(__name__)
+
+# @app.route('/')
+# def index():
+#     # Render the ad page
+#     return render_template('index.html')
+
+# @app.route('/skip-ad', methods=['POST'])
+# def skip_ad():
+#     # After the ad is skipped, render the video page
+#     return render_template('video.html')
+
+# if __name__ == '__main__':
+#     # Run the Flask app without the auto-reloader
+#     app.run(debug=True, use_reloader=False)
+
 import asyncio
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Application, CommandHandler, ContextTypes
 import threading
@@ -9,8 +27,8 @@ app = Flask(__name__)
 # Telegram bot token
 BOT_TOKEN = '7159342226:AAHEdFVDm1DhfNZ779biG2QMBMSVwncklfM'
 
-# Web app URL (update this when you deploy)
-WEB_APP_URL = 'https://telegram-bot-aagw.onrender.com/'  # Localhost for testing
+# Web app URL
+WEB_APP_URL = 'https://telegram-bot-aagw.onrender.com/'  # Public URL of the hosted Flask service
 
 @app.route('/')
 def index():
@@ -57,3 +75,4 @@ if __name__ == '__main__':
 
     # Run the Flask app
     app.run(debug=True)
+
