@@ -10,7 +10,7 @@ app = Flask(__name__)
 BOT_TOKEN = '7159342226:AAHEdFVDm1DhfNZ779biG2QMBMSVwncklfM'
 
 # Web app URL (update this when you deploy)
-WEB_APP_URL = 'http://127.0.0.1:5000/'  # Localhost for testing
+WEB_APP_URL = 'https://telegram-bot-aagw.onrender.com/'  # Localhost for testing
 
 @app.route('/')
 def index():
