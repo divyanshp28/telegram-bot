@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -10,6 +10,25 @@
     <div class="bg-white p-6 rounded-lg shadow-lg text-center">
         <h1 class="text-2xl font-bold mb-4">Your Video</h1>
         <iframe width="560" height="315" src="https://www.youtube.com/embed/vZtm1wuA2yc" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col">
+    <div class="container mx-auto p-6">
+        <h1 class="text-2xl font-semibold mb-4">Enjoy the Video</h1>
+        <video width="640" height="360" controls>
+            <source src="{{ url_for('serve_video', filename=video_filename) }}" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
     </div>
 </body>
 </html>
