@@ -155,7 +155,7 @@ def run_bot():
     loop.run_until_complete(application.run_polling())
 
 if __name__ == '__main__':
-    # bot_thread = threading.Thread(target=run_bot)
-    # bot_thread.start()
+    bot_thread = threading.Thread(target=run_bot)
+    bot_thread.start()
 
     app.run(debug=True)
