@@ -25,6 +25,8 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'admin_login' 
 
+video_map = {}
+
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
 class Admin(UserMixin):
@@ -64,6 +66,7 @@ def admin_logout():
 @app.route('/admin-dashboard', methods=['GET', 'POST'])
 @login_required
 def admin_dashboard():
+    video_link = None
     if request.method == 'POST':
         if 'video' not in request.files:
             flash('No file part', 'danger')
@@ -75,37 +78,53 @@ def admin_dashboard():
             return redirect(request.url)
 
         if video and video.filename.lower().endswith(('.mp4', '.avi', '.mov')):
-            filename = video.filename
-            video.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            flash('Video uploaded successfully!', 'success')
-            return redirect(url_for('admin_dashboard'))
-        else:
-            flash('Invalid file type. Only video files are allowed.', 'danger')
+            original_filename = video.filename
+            unique_id = str(uuid.uuid4())
+            unique_filename = f"{unique_id}_{original_filename}"
+            video.save(os.path.join(app.config['UPLOAD_FOLDER'], unique_filename))
 
-    videos = os.listdir(app.config['UPLOAD_FOLDER'])
-    return render_template('admin_dashboard.html', videos=videos)
+            video_map[unique_id] = unique_filename
 
-@app.route('/uploads/<filename>')
-def serve_video(filename):
+            video_link = url_for('video_redirect', unique_id=unique_id, _external=True)
+            print(f'Generated video link: {video_link}')  # Debugging statement
+            flash(f'Video uploaded successfully! Here is your link: {video_link}', 'success')
+
+    videos = [filename for filename in os.listdir(app.config['UPLOAD_FOLDER']) if filename.split('_')[0] in video_map]
+    return render_template('admin_dashboard.html', videos=videos, video_link=video_link)
+
+@app.route('/uploads/<unique_id>')
+def serve_video(unique_id):
+    filename = video_map.get(unique_id)
+    if not filename:
+        return "Video not found", 404
+
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
 @app.route('/')
 def index():
-    # Render the ad page
     return render_template('index.html')
 
-@app.route('/video/<filename>')
-def video_redirect(filename):
-    video_url = url_for('serve_video', filename=filename, _external=True)
-    return redirect(f"{WEB_APP_URL}?video_url={video_url}")
+@app.route('/video/<unique_id>')
+def video_redirect(unique_id):
+    return redirect(url_for('watch_ad', unique_id=unique_id))
+
+@app.route('/watch/<unique_id>')
+def watch_ad(unique_id):
+    video_url = url_for('serve_video', unique_id=unique_id, _external=True)
+    return render_template('index.html', video_url=video_url)
 
 @app.route('/skip-ad', methods=['POST'])
 def skip_ad():
-    video_url = request.args.get('video_url') 
+    video_url = request.form.get('video_url')
     if video_url:
         return redirect(video_url)
     else:
         return "No video URL provided", 400
+    
+@app.route('/play-video')
+def play_video():
+    video_url = request.args.get('video_url')
+    return render_template('video.html', video_url=video_url)
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     keyboard = [[InlineKeyboardButton("Watch Ad", url=WEB_APP_URL)]]
@@ -121,29 +140,22 @@ async def send_video(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None
         await update.message.reply_text("Please provide a video filename.")
         return
 
-    video_filename = context.args[0]
-    video_redirect_url = url_for('video_redirect', filename=video_filename, _external=True)
+    unique_id = str(uuid.uuid4())  # Generating a unique ID for the user request
+    video_redirect_url = url_for('video_redirect', unique_id=unique_id, _external=True)
     await update.message.reply_text(f"Watch the video here: {video_redirect_url}")
-
 def run_bot():
-    # Create a new event loop for this thread
     asyncio.set_event_loop(asyncio.new_event_loop())
     loop = asyncio.get_event_loop()
 
-    # Initialize the Application (bot)
     application = Application.builder().token(BOT_TOKEN).build()
 
-    # Add command handlers
     application.add_handler(CommandHandler("start", start))
     application.add_handler(CommandHandler("get_video", send_video))
 
-    # Run the bot
     loop.run_until_complete(application.run_polling())
 
 if __name__ == '__main__':
-    # Run the Telegram bot in a separate thread
-    bot_thread = threading.Thread(target=run_bot)
-    bot_thread.start()
+    # bot_thread = threading.Thread(target=run_bot)
+    # bot_thread.start()
 
-    # Run the Flask app
     app.run(debug=True)

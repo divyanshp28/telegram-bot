@@ -5,6 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        function copyToClipboard() {
+            const copyText = document.getElementById('videoLink');
+            copyText.select();
+            document.execCommand('copy');
+            alert("Link copied to clipboard!");
+        }
+    </script>
 </head>
 <body class="bg-gray-100 min-h-screen flex flex-col">
 
@@ -39,6 +47,19 @@
                 </form>
             </div>
 
+            <!-- Display Video Link -->
+            {% if video_link %}
+            <div>
+                <h2 class="text-2xl font-semibold mb-4">Generated Video Link</h2>
+                <input type="text" id="videoLink" value="{{ video_link }}" readonly
+                    class="w-full p-2 border border-gray-300 rounded-lg">
+                <button onclick="copyToClipboard()"
+                    class="mt-2 w-full bg-green-500 text-white py-2 px-4 rounded-lg font-medium hover:bg-green-600 focus:outline-none focus:ring focus:ring-green-300">
+                    Copy Link
+                </button>
+            </div>
+            {% endif %}
+
             <!-- Uploaded Videos Table -->
             <div>
                 <h2 class="text-2xl font-semibold mb-4">Uploaded Videos</h2>
@@ -55,7 +76,7 @@
                                 <td class="py-2 px-4">{{ video }}</td>
                                 <td class="py-2 px-4">
                                     <video width="320" height="240" controls>
-                                        <source src="{{ url_for('serve_video', filename=video) }}" type="video/mp4">
+                                        <source src="{{ url_for('serve_video', unique_id=video.split('_')[0]) }}" type="video/mp4">
                                         Your browser does not support the video tag.
                                     </video>
                                 </td>
@@ -66,6 +87,5 @@
             </div>
         </div>
     </main>
-
 </body>
 </html>
